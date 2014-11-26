@@ -1,0 +1,53 @@
+Ctrl+a h for help
+/u/c/s/cs537-2/ta/tools/qemu -serial mon:stdio -hdb fs.img xv6.img -smp 2
+xv6...
+lapicinit: 1 0xfee00000
+cpu1: starting
+cpu0: starting
+init: starting sh
+$ multi
+bp=3000 p=1C04 s.ptr=1C04
+bp=3000 p=11B0 s.ptr=11B0
+bp=B000 p=11B0 s.ptr=3000
+bp=B000 p=3000 s.ptr=11B0
+Done!
+Process going Done!
+ProcesbDone!
+ProcessDone!
+Procs going bye! CurrentEnd=11000
+bp=10FF8 p=3000 s.ptr=B000
+bp=10FF8 p=B000 s.ptr=11B0
+Process 6 exiting
+Found One
+Here with i=0
+ye! CurrentEnd=11000
+bp=7 p=B000 s.ptr=11B0
+Process 4 exiting
+ going bye! CurrentEnd=11000
+bp=7 pFound One
+Here with i=e=B000 s.ptr=7
+bp=7 p=7 s.ptr=11B0
+bp=7 p=11B0 s.ptr=3000
+bp=7 p=3000 s.ptr=B000
+bp=7 p=B000 s.ptr=7
+bp=7 p=7 s.ptr=11B0
+bp=7 p=11B0 s.ptr=3000
+bp=7 p=3000 s.ptr=B000
+bp=7 p=B000 s.ptr=7
+bp=7 p=7 s.ptr=11B0
+bp=7 p=11B0 s.ptr=3000
+bp=7 p=3000 s.ptr=B000
+bp=7 p=B000 s.ptr=7
+bp=7 p1ss going bye! CurrentEnd=11000
+bp=5 p=B000 s.ptr=7
+Process 7 exiting
+=7 s.ptr=11B0
+Process 5 exiting
+
+Found One
+Here with i=2
+Found One
+Here with i=3
+TEST PASSED
+Process 3 exiting
+$ 

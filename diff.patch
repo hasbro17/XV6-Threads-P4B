@@ -1,0 +1,71 @@
+diff --git a/kernel/defs.h b/kernel/defs.h
+index 06b6f11..1d7b58f 100644
+--- a/kernel/defs.h
++++ b/kernel/defs.h
+@@ -149,6 +149,7 @@ void            idtinit(void);
+ extern uint     ticks;
+ void            tvinit(void);
+ extern struct spinlock tickslock;
++extern struct spinlock guardlock;
+ 
+ // uart.c
+ void            uartinit(void);
+diff --git a/kernel/sysproc.c b/kernel/sysproc.c
+index c7698d8..3ff47b0 100644
+--- a/kernel/sysproc.c
++++ b/kernel/sysproc.c
+@@ -99,11 +99,34 @@ sys_clone(void)
+ int
+ sys_lock(void)
+ {
++
++  void *argLock;
++  if(argptr(0, (void*)&argLock, sizeof(void*)) < 0)
++    return -1;
++  int *intLock=argLock;
++
++  //To spin: comment out guardlocks and sleep
++  acquire(&guardlock);
++  while(xchg((unsigned int*)intLock, 1)==1)
++  {
++	sleep(proc->pgdir,&guardlock);//FIXME sleep on your page directory as the channel? All threads share that
++  }
++  release(&guardlock);
++	
+   return proc->pid;
+ }
+ int
+ sys_unlock(void)
+ {
++  void *argLock;
++  if(argptr(0, (void*)&argLock, sizeof(void*)) < 0)
++    return -1;
++  int *intLock=argLock;
++
++  xchg((unsigned int*)intLock, 0);
++
++  wakeup(proc->pgdir);//FIXME wakeup all threads sleeping on your page directory. Seems fine
++
+   return proc->pid;
+ }
+ int
+diff --git a/kernel/trap.c b/kernel/trap.c
+index 21fca9f..74d5645 100644
+--- a/kernel/trap.c
++++ b/kernel/trap.c
+@@ -11,6 +11,7 @@
+ struct gatedesc idt[256];
+ extern uint vectors[];  // in vectors.S: array of 256 entry pointers
+ struct spinlock tickslock;
++struct spinlock guardlock;
+ uint ticks;
+ 
+ void
+@@ -23,6 +24,7 @@ tvinit(void)
+   SETGATE(idt[T_SYSCALL], 1, SEG_KCODE<<3, vectors[T_SYSCALL], DPL_USER);
+   
+   initlock(&tickslock, "time");
++  initlock(&guardlock, "guard");
+ }
+ 
+ void

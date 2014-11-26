@@ -1,0 +1,8 @@
+Ctrl+a h for help
+/u/c/s/cs537-2/ta/tools/qemu -serial mon:stdio -hdb fs.img xv6.img -smp 2
+xv6...
+lapicinit: 1 0xfee00000
+cpu1: starting
+cpu0: starting
+init: starting sh
+$ 
